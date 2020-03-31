@@ -1,0 +1,54 @@
+
+\documentclass{article}
+\usepackage[USenglish]{babel}
+
+% Use the postscript times font!
+\usepackage{authblk}
+\usepackage{soul}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage[ruled,linesnumbered,noresetcount,vlined]{algorithm2e}
+\renewcommand\AlCapNameSty{\slshape}
+\SetKwFor{Repeat}{repeat}{:}{endw}
+\SetKwFor{Forall}{forall}{}{endw}
+\usepackage{wrapfig}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.multipart}
+\usepackage{siunitx}
+\usepackage[normalem]{ulem}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+
+\begin{document}
+
+\begin{itemize}
+	\item $x^p_{it}$ number of resources used in city $i$ during period $t$
+	\item $x^r_{ijt}$ number of resources moved from city $i$ to city $j$ starting at period $t$
+	\item $u_{it}$ number of people without a resource
+	\item $\lambda_{it}$ the amount of demand in city $i$ during period $t$ assuming everyone gets a resource in the previous period
+	\item $tt_{ij}$ the number of periods it takes to get from $i$ to $j$
+	\item $A_{it-1}$ the amount of new resources produced in city $i$ during period $t-1$
+	\item $T$ the number of periods to lookahead
+	\item $K$ the average number of periods a person needs a resource for.
+\end{itemize}
+
+\begin{figure}[!t]
+\begin{subequations} \label{mpc}
+\begin{flalign}
+& \text{min} \sum_{t=0}^{T-1}\sum_{i \in Z} (T - t)u_{it}  + \sum_{t=0}^{T-1} \sum_{i,j \in Z} tt_{ij} x^r_{ijt} \label{mpc:obj} \\
+\intertext{subject to} 
+& \; x^p_{i0}  + u_{i0} = \lambda_{i0} \quad (\forall i) \label{mpc:constr:demand_balance_0} \\	
+& \; x^p_{it}  + u_{it} = \lambda_{it} - \sum_{k=0}^N u_{it-k} \quad (\forall i,j,t) \label{mpc:constr:demand_balance} \\ 
+& \; x^p_{it} + x^r_{ijt} = |A_{it-1}| + \sum_{j} x^p_{i t-1} + x^r_{jit - tt_{ji}} \; (\forall i,t)  \label{mpc:constr:balance} \\
+& \; x^p_{ijt} \in \mathbb{Z}, x^r_{ijt} \in \mathbb{Z}, u_{ijt} \in \mathbb{Z}  \label{mpc:constr:domain}
+\end{flalign}
+\end{subequations}
+\caption{The MPC-MIP Model for Resource Balancing.}
+\label{fig:mpc}
+\end{figure}
+
+\end{document}
