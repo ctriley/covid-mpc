@@ -1,3 +1,5 @@
+#gurobi
+*.lp
 # tex
 *.aux
 *.log
