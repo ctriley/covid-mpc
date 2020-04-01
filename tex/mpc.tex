@@ -29,11 +29,13 @@
 	\item $x^p_{it}$ number of resources used in city $i$ during period $t$
 	\item $x^r_{ijt}$ number of resources moved from city $i$ to city $j$ starting at period $t$
 	\item $u_{it}$ number of people without a resource
+	\item $v_{it}$ number of people who died as a result of lack of resource
 	\item $\lambda_{it}$ the amount of demand in city $i$ during period $t$ assuming everyone gets a resource in the previous period
 	\item $tt_{ij}$ the number of periods it takes to get from $i$ to $j$
-	\item $A_{it-1}$ the amount of new resources produced in city $i$ during period $t-1$
+	\item $A_{it-1}$ the amount of new resources available in city $i$ starting at period $t$
 	\item $T$ the number of periods to lookahead
 	\item $K$ the average number of periods a person needs a resource for.
+	\item $D$ percent of people who die if they don't have a resource
 \end{itemize}
 
 \begin{figure}[!t]
@@ -41,9 +43,10 @@
 \begin{flalign}
 & \text{min} \sum_{t=0}^{T-1}\sum_{i \in Z} (T - t)u_{it}  + \sum_{t=0}^{T-1} \sum_{i,j \in Z} tt_{ij} x^r_{ijt} \label{mpc:obj} \\
 \intertext{subject to} 
-& \; x^p_{i0}  + u_{i0} = \lambda_{i0} \quad (\forall i) \label{mpc:constr:demand_balance_0} \\	
-& \; x^p_{it}  + u_{it} = \lambda_{it} - \sum_{k=0}^N u_{it-k} \quad (\forall i,j,t) \label{mpc:constr:demand_balance} \\ 
-& \; x^p_{it} + x^r_{ijt} = |A_{it-1}| + \sum_{j} x^p_{i t-1} + x^r_{jit - tt_{ji}} \; (\forall i,t)  \label{mpc:constr:balance} \\
+& \; x^p_{i0}  + u_{i0} = \lambda_{i0} \quad (\forall i) \label{mpc:constr:demand_balance_0} \\
+& \; x^p_{it}  + u_{it} = \lambda_{it} - \sum_{k=0}^N v_{it-k} \quad (\forall i,j,t) \label{mpc:constr:demand_balance} \\ 
+& \; v_{it} \leq  D u_{it} \leq v_{it} + 1 \quad (\forall i,t) \\
+& \; x^p_{it} + x^r_{ijt} = A_{it-1} + \sum_{j} x^p_{i t-1} + x^r_{jit - tt_{ji}} \; (\forall i,t)  \label{mpc:constr:balance} \\
 & \; x^p_{ijt} \in \mathbb{Z}, x^r_{ijt} \in \mathbb{Z}, u_{ijt} \in \mathbb{Z}  \label{mpc:constr:domain}
 \end{flalign}
 \end{subequations}
